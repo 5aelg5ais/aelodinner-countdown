@@ -147,15 +147,20 @@
     </div>
 
     <script>
-    // Target Date Set to July 8, 2026
-    const EVENT_TARGET_DATE = new Date(2026, 6, 8, 18, 30, 0); 
-
     function runSystemCountdownEngine() {
-        const systemCurrentTime = new Date();
-        const timeDelta = EVENT_TARGET_DATE - systemCurrentTime;
+        // 1. Get current time explicitly forced into Singapore Time (Asia/Singapore)
+        const nowSG = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Singapore" }));
+        
+        // 2. Set Target Event Date explicitly in Singapore Time (July 8, 2026)
+        const targetSG = new Date(2026, 6, 8); // July is index 6
 
-        // Math.floor fixes the fractional day rounding issue perfectly
-        const totalDaysRemaining = Math.floor(timeDelta / (1000 * 60 * 60 * 24));
+        // 3. Clear time layers completely to compare pure midnight-to-midnight calendar dates
+        const currentLocalDateOnly = new Date(nowSG.getFullYear(), nowSG.getMonth(), nowSG.getDate());
+        const targetLocalDateOnly = new Date(targetSG.getFullYear(), targetSG.getMonth(), targetSG.getDate());
+
+        // 4. Calculate absolute day gap delta
+        const timeDelta = targetLocalDateOnly - currentLocalDateOnly;
+        const totalDaysRemaining = Math.round(timeDelta / (1000 * 60 * 60 * 24));
         
         const numberDOM = document.getElementById('days-count');
         const labelDOM = document.getElementById('days-label');
