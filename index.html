@@ -147,34 +147,35 @@
     </div>
 
     <script>
-        // Target Date Set to July 8, 2026
-        const EVENT_TARGET_DATE = new Date(2026, 6, 8, 18, 30, 0); 
+    // Target Date Set to July 8, 2026
+    const EVENT_TARGET_DATE = new Date(2026, 6, 8, 18, 30, 0); 
 
-        function runSystemCountdownEngine() {
-            const systemCurrentTime = new Date();
-            const timeDelta = EVENT_TARGET_DATE - systemCurrentTime;
+    function runSystemCountdownEngine() {
+        const systemCurrentTime = new Date();
+        const timeDelta = EVENT_TARGET_DATE - systemCurrentTime;
 
-            const totalDaysRemaining = Math.ceil(timeDelta / (1000 * 60 * 60 * 24));
-            
-            const numberDOM = document.getElementById('days-count');
-            const labelDOM = document.getElementById('days-label');
+        // Math.floor fixes the fractional day rounding issue perfectly
+        const totalDaysRemaining = Math.floor(timeDelta / (1000 * 60 * 60 * 24));
+        
+        const numberDOM = document.getElementById('days-count');
+        const labelDOM = document.getElementById('days-label');
 
-            if (totalDaysRemaining > 1) {
-                numberDOM.innerText = totalDaysRemaining;
-                labelDOM.innerText = "Days To Go";
-            } else if (totalDaysRemaining === 1) {
-                numberDOM.innerText = "01";
-                labelDOM.innerText = "Day To Go";
-            } else if (totalDaysRemaining === 0) {
-                numberDOM.innerText = "🎉";
-                labelDOM.innerText = "It's Dinner Day!";
-            } else {
-                numberDOM.innerText = "00";
-                labelDOM.innerText = "Event Concluded";
-            }
+        if (totalDaysRemaining > 1) {
+            numberDOM.innerText = totalDaysRemaining;
+            labelDOM.innerText = "Days To Go";
+        } else if (totalDaysRemaining === 1) {
+            numberDOM.innerText = "01";
+            labelDOM.innerText = "Day To Go";
+        } else if (totalDaysRemaining === 0) {
+            numberDOM.innerText = "🎉";
+            labelDOM.innerText = "It's Dinner Day!";
+        } else {
+            numberDOM.innerText = "00";
+            labelDOM.innerText = "Event Concluded";
         }
+    }
 
-        window.onload = runSystemCountdownEngine;
-    </script>
+    window.onload = runSystemCountdownEngine;
+</script>
 </body>
 </html>
