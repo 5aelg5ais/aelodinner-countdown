@@ -32,41 +32,76 @@
             position: relative;
             
             /* Reference Background Image Setup */
-            background-image: url('Countdown Template.png'); /* Name your template image 'Countdown Template.png' */
+            background-image: url('Countdown Template.png');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
         }
 
-        /* The Dynamic Overlay Layer inside the Upper Box Frame */
+        /* --- ✨ ANIMATION LAYER: FULL-WIDTH TOP HALF SHOOTING STARS --- */
+        .space-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55%; /* Spans the top half completely above the personnel */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(-45deg, #00f2fe, rgba(0, 0, 0, 0));
+            border-radius: 999px;
+            filter: drop-shadow(0 0 6px #00f2fe);
+            animation: tail 4000ms ease-in-out infinite, shooting 4000ms ease-in-out infinite;
+        }
+
+        /* Staggered placements crossing full left-to-right grid lanes */
+        .shooting-star:nth-child(1) { top: 5%; left: 80%; animation-delay: 0s; animation-duration: 3.5s; }
+        .shooting-star:nth-child(2) { top: 18%; left: 95%; animation-delay: 1.5s; animation-duration: 4.5s; }
+        .shooting-star:nth-child(3) { top: 12%; left: 40%; animation-delay: 0.7s; animation-duration: 3s; }
+        .shooting-star:nth-child(4) { top: 25%; left: 70%; animation-delay: 2.3s; animation-duration: 4s; }
+
+        @keyframes tail {
+            0% { width: 0; }
+            25% { width: 120px; }
+            100% { width: 0; }
+        }
+
+        @keyframes shooting {
+            0% { transform: translateX(0) translateY(0) rotate(-35deg); }
+            100% { transform: translateX(-400px) translateY(280px) rotate(-35deg); }
+        }
+
+        /* --- ⏳ INTERACTIVE OVERLAY FRAME AREA --- */
         .counter-overlay-box {
             position: absolute;
-            /* Positions the content precisely over the black frame of Countdown Template.jpg */
             top: 10.5%; 
             left: 7.5%;
             width: 85%;
             height: 23%;
             
-            /* Layout styling for the inner text placement */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            pointer-events: none; /* Allows natural interaction layers underneath */
+            pointer-events: none; 
+            z-index: 2;
         }
 
-        /* Giant Dynamic Countdown Number styling */
+        /* Giant Dynamic Countdown Number with fixed 1-second accelerated pulse string link */
         .dynamic-number {
             font-size: 5.5rem;
             font-weight: 900;
             line-height: 0.9;
             margin: 0;
-            background: linear-gradient(180deg, #ffffff 40%, #b0c4de 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.5));
+            color: #ffffff;
+            animation: neonPulseFast 1s ease-in-out infinite alternate;
         }
 
         /* Description State Label text styling */
@@ -79,14 +114,31 @@
             text-transform: uppercase;
             text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
         }
+
+        /* Accelerated pulsing kinetic speed loop */
+        @keyframes neonPulseFast {
+            0% {
+                text-shadow: 0 0 4px #fff, 0 0 10px rgba(0, 242, 254, 0.6), 0 0 15px rgba(0, 242, 254, 0.4);
+            }
+            100% {
+                text-shadow: 0 0 12px #fff, 0 0 25px rgba(0, 242, 254, 1), 0 0 40px rgba(0, 242, 254, 0.8);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 9:16 Poster Container mapping to Countdown Template.jpg -->
     <div class="poster-container">
         
-        <!-- Interactive Text Engine Layer mapped precisely over the empty frame box -->
+        <!-- Sky Matrix Overlay Animation -->
+        <div class="space-effects">
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+        </div>
+        
+        <!-- HUD Central Readout Counter -->
         <div class="counter-overlay-box">
             <h1 class="dynamic-number" id="days-count">--</h1>
             <p class="dynamic-label" id="days-label">Days To Go</p>
@@ -95,20 +147,18 @@
     </div>
 
     <script>
-        // Set target date strictly to July 8, 2026 (Month index is 0-11: July = 6)
+        // Target Date Set to July 8, 2026
         const EVENT_TARGET_DATE = new Date(2026, 6, 8, 18, 30, 0); 
 
         function runSystemCountdownEngine() {
             const systemCurrentTime = new Date();
             const timeDelta = EVENT_TARGET_DATE - systemCurrentTime;
 
-            // Convert milliseconds into remaining whole days
             const totalDaysRemaining = Math.ceil(timeDelta / (1000 * 60 * 60 * 24));
             
             const numberDOM = document.getElementById('days-count');
             const labelDOM = document.getElementById('days-label');
 
-            // Evaluation Loop mapping grammar states dynamically
             if (totalDaysRemaining > 1) {
                 numberDOM.innerText = totalDaysRemaining;
                 labelDOM.innerText = "Days To Go";
@@ -124,7 +174,6 @@
             }
         }
 
-        // Run immediately when system DOM finishes painting context elements
         window.onload = runSystemCountdownEngine;
     </script>
 </body>
